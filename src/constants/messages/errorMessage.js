@@ -7,6 +7,8 @@ const ERROR_MESSAGES = deepFreeze({
   invalid_buyer_length: '로또 구매자는 최소 1명이상 5명 이하여야해요!',
   invalid_buyer_name_length: '로또 구매자의 이름은 최소 1자 이상 4자 이하여야해요!',
   have_space_buyer_name: '구매자 이름에 공백이 포함되면 안돼요!',
+  invalid_lotto_amount: '로또 구입 갯수는 1개 이상 100개 이하여야합니다!',
+  not_divided_lotto_amount: '로또 구입 갯수는 1000원 단위여야합니다!',
 });
 
 export default ERROR_MESSAGES;
