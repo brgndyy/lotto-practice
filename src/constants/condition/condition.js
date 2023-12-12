@@ -12,6 +12,13 @@ const CONDITION = deepFreeze({
   buyer_name_max_length: 4,
   min_lotto_amount: 1,
   max_lotto_amount: 100,
+  lotto_price: 1000,
+  winning_check: '✓',
+  bonus_check: '•',
+  first_winner_match_count: 6,
+  second_winner_match_count: 5,
+  third_winner_match_count: 4,
+  fourth_winner_match_count: 3,
 });
 
 export default CONDITION;
