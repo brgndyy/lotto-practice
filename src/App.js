@@ -5,10 +5,11 @@ import InputView from './views/InputView.js';
 import BonusNumberValidator from './validator/BonusNumberValidator.js';
 import LottoBuyerValidator from './validator/LottoBuyerValidator.js';
 import AmountOfBoughtLottoValidator from './validator/AmountOfBoughtLottoValidator.js';
+import StatisticsCalculator from './services/StatisticsCalculator.js';
 
 class App {
   #winningLottoNumbers = {
-    winnigLotto: [],
+    winningLotto: [],
     bonusNumber: 0,
   };
 
@@ -17,7 +18,7 @@ class App {
   #lottoBuyers;
 
   constructor() {
-    this.#winningLottoNumbers.winnigLotto = Lotto.generateNewLotto();
+    this.#winningLottoNumbers.winningLotto = Lotto.generateNewLotto();
   }
 
   async play() {
@@ -25,17 +26,18 @@ class App {
     await asyncFunctionHandlerWithError(this.#generateWinningLotto, this);
     await asyncFunctionHandlerWithError(this.#readLottoBuyers, this);
     await asyncFunctionHandlerWithError(this.#readAmountOfLottoOfBuyer, this);
+    this.#printStatisticalResult();
   }
 
   #printWinnigLottoNumbersExceptBonusNumber() {
-    OutputView.printWinningLottoNumbersExceptBonus(this.#winningLottoNumbers.winnigLotto);
+    OutputView.printWinningLottoNumbersExceptBonus(this.#winningLottoNumbers.winningLotto);
 
     OutputView.divideLine();
   }
 
   async #generateWinningLotto() {
     const bonusNumber = await InputView.readBonusNumber();
-    BonusNumberValidator.validateBonusNumber(this.#winningLottoNumbers.winnigLotto, bonusNumber);
+    BonusNumberValidator.validateBonusNumber(this.#winningLottoNumbers.winningLotto, bonusNumber);
     this.#winningLottoNumbers.bonusNumber = bonusNumber;
 
     OutputView.divideLine();
@@ -66,6 +68,48 @@ class App {
     this.#totalBuyersInfo.push({ name: buyer, totalBoughtLottoNumbers });
 
     OutputView.divideLine();
+  }
+
+  #printStatisticalResult() {
+    this.#totalBuyersInfo.forEach((buyer) => {
+      this.#printStatisticalResultStart(buyer.name);
+      this.#printBoughtLottoHistory(buyer.totalBoughtLottoNumbers);
+      this.#printTotalWinningLotto(this.#winningLottoNumbers);
+      this.#printTotalWinningResult(this.#winningLottoNumbers, buyer.totalBoughtLottoNumbers);
+      this.#printTotalPrintStatisticalResult(
+        this.#winningLottoNumbers,
+        buyer.totalBoughtLottoNumbers,
+      );
+    });
+  }
+
+  #printStatisticalResultStart(name) {
+    OutputView.printStatisticalResultStart(name);
+    OutputView.divideLine();
+  }
+
+  #printBoughtLottoHistory(totalBoughtLottoNumbers) {
+    OutputView.printBoughtLottoHistory(totalBoughtLottoNumbers);
+    OutputView.divideLine();
+  }
+
+  #printTotalWinningLotto(winningLottoNumbers) {
+    OutputView.printTotalWinningLotto(winningLottoNumbers);
+    OutputView.divideLine();
+  }
+
+  #printTotalWinningResult(winningLottoNumbers, totalBoughtLottoNumbers) {
+    OutputView.printTotalWinningResult(winningLottoNumbers, totalBoughtLottoNumbers);
+    OutputView.divideLine();
+  }
+
+  #printTotalPrintStatisticalResult(winningLottoNumbers, totalBoughtLottoNumbers) {
+    const { ranks, profitRate } = StatisticsCalculator.calculateTotalStatistics(
+      winningLottoNumbers,
+      totalBoughtLottoNumbers,
+    );
+
+    OutputView.printTotalStatisticsResult(ranks, profitRate);
   }
 }
 
