@@ -10,6 +10,8 @@ const CONDITION = deepFreeze({
   buyers_max_length: 5,
   buyers_name_min_length: 1,
   buyer_name_max_length: 4,
+  min_lotto_amount: 1,
+  max_lotto_amount: 100,
 });
 
 export default CONDITION;

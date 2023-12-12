@@ -13,6 +13,12 @@ const InputView = {
 
     return Number(number);
   },
+
+  async readAmountOfBoughtLotto(buyer) {
+    const amountOfLotto = await Console.readLineAsync(PROGRESS_MESSAGE.amount_of_lotto(buyer));
+
+    return Number(amountOfLotto) / 1000;
+  },
 };
 
 export default InputView;
