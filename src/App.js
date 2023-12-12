@@ -5,28 +5,37 @@ import InputView from './views/InputView.js';
 import BonusNumberValidator from './validator/BonusNumberValidator.js';
 
 class App {
-  #winningLottoNumbers;
+  #winningLottoNumbers = {
+    winnigLotto: [],
+    bonusNumber: 0,
+  };
 
-  #bonusNumber;
+  #lottoBuyers;
 
   constructor() {
-    this.#winningLottoNumbers = Lotto.generateNewLotto();
+    this.#winningLottoNumbers.winnigLotto = Lotto.generateNewLotto();
   }
 
   async play() {
     this.#printWinnigLottoNumbersExceptBonusNumber();
     await asyncFunctionHandlerWithError(this.#generateWinningLotto, this);
-    await asyncFunctionHandlerWithError(this.#generateWinningLotto, this);
+    await asyncFunctionHandlerWithError(this.#readLottoBuyers, this);
   }
 
   #printWinnigLottoNumbersExceptBonusNumber() {
-    OutputView.printWinningLottoNumbersExceptBonus(this.#winningLottoNumbers);
+    OutputView.printWinningLottoNumbersExceptBonus(this.#winningLottoNumbers.winnigLotto);
   }
 
   async #generateWinningLotto() {
-    this.#bonusNumber = await InputView.readBonusNumber();
+    const bonusNumber = await InputView.readBonusNumber();
 
-    BonusNumberValidator.validateBonusNumber(this.#winningLottoNumbers, this.#bonusNumber);
+    BonusNumberValidator.validateBonusNumber(this.#winningLottoNumbers.winnigLotto, bonusNumber);
+
+    this.#winningLottoNumbers.bonusNumber = bonusNumber;
+  }
+
+  async #readLottoBuyers() {
+    this.#lottoBuyers = await InputView.readLottoBuyers();
   }
 }
 
