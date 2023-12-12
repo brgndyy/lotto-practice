@@ -3,6 +3,7 @@ import asyncFunctionHandlerWithError from './utils/asyncFunctionHandlerWithError
 import OutputView from './views/OutputView.js';
 import InputView from './views/InputView.js';
 import BonusNumberValidator from './validator/BonusNumberValidator.js';
+import LottoBuyerValidator from './validator/LottoBuyerValidator.js';
 
 class App {
   #winningLottoNumbers = {
@@ -20,6 +21,7 @@ class App {
     this.#printWinnigLottoNumbersExceptBonusNumber();
     await asyncFunctionHandlerWithError(this.#generateWinningLotto, this);
     await asyncFunctionHandlerWithError(this.#readLottoBuyers, this);
+    await asyncFunctionHandlerWithError(this.#readAmountOfLottoOfBuyer, this);
   }
 
   #printWinnigLottoNumbersExceptBonusNumber() {
@@ -28,7 +30,6 @@ class App {
 
   async #generateWinningLotto() {
     const bonusNumber = await InputView.readBonusNumber();
-
     BonusNumberValidator.validateBonusNumber(this.#winningLottoNumbers.winnigLotto, bonusNumber);
 
     this.#winningLottoNumbers.bonusNumber = bonusNumber;
@@ -36,7 +37,11 @@ class App {
 
   async #readLottoBuyers() {
     this.#lottoBuyers = await InputView.readLottoBuyers();
+
+    LottoBuyerValidator.validateBuyer(this.#lottoBuyers);
   }
+
+  async #readAmountOfLottoOfBuyer() {}
 }
 
 export default App;
